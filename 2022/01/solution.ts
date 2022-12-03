@@ -1,7 +1,11 @@
 // @ts-ignore
 import * as fs from 'fs';
 
-const input = fs.readFileSync('input.txt', 'utf8');
+const input: string = fs.readFileSync('input.txt', 'utf8')
+
+const sumArray = function (array: number[]) {
+    return array.reduce((partialSum: number, value: number) => partialSum + value, 0)
+}
 
 /**
  * PART 1
@@ -28,6 +32,4 @@ console.log('Maximum calories: ' + maximum)
 
 const sortedSums = individualSums.sort((elf: number, otherElf: number) => otherElf - elf)
 
-const top3Sum = sortedSums.slice(0, 3).reduce((partialSum: number, calories: number) => partialSum + calories, 0)
-
-console.log('Top 3 Sum: ' + top3Sum)
+console.log('Top 3 Sum: ' + sumArray(sortedSums.slice(0, 3)))

@@ -1,7 +1,11 @@
 // @ts-ignore
 import * as fs from 'fs';
 
-const input = fs.readFileSync('input.txt', 'utf8');
+const input: string = fs.readFileSync('input.txt', 'utf8')
+
+const sumArray = function (array: number[]) {
+    return array.reduce((partialSum: number, value: number) => partialSum + value, 0)
+}
 
 /**
  * PART 1
@@ -60,10 +64,7 @@ const scores = substitutedRounds.map(
     round => calculateScore(round[0] as Shape, round[1] as Shape)
 )
 
-// Sum scores
-const totalScore = scores.reduce((partialSum: number, score: number) => partialSum + score, 0)
-
-console.log('Total score: ' + totalScore);
+console.log('Total score: ' + sumArray(scores));
 
 /**
  * PART 2
@@ -99,11 +100,6 @@ const substitutedDeterminedRounds = rounds.map(
 )
 
 // Calculate scores
-const newMethodScores = substitutedDeterminedRounds.map(
-    round => calculateScore(round[0] as Shape, round[1] as Shape)
-)
+const newMethodScores = substitutedDeterminedRounds.map(round => calculateScore(round[0] as Shape, round[1] as Shape))
 
-// Sum scores
-const newMethodTotalScore = newMethodScores.reduce((partialSum: number, score: number) => partialSum + score, 0)
-
-console.log('Method 2 score: ' + newMethodTotalScore);
+console.log('Method 2 score: ' + sumArray(newMethodScores));
