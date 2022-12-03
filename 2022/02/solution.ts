@@ -3,7 +3,7 @@ import * as fs from 'fs';
 
 const input: string = fs.readFileSync('input.txt', 'utf8')
 
-const sumArray = function (array: number[]) {
+const sumArray = function (array: number[]): number {
     return array.reduce((partialSum: number, value: number) => partialSum + value, 0)
 }
 

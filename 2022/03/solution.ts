@@ -3,7 +3,7 @@ import * as fs from 'fs';
 
 const input: string = fs.readFileSync('input.txt', 'utf8')
 
-const sumArray = function (array: number[]) {
+const sumArray = function (array: number[]): number {
     return array.reduce((partialSum: number, value: number) => partialSum + value, 0)
 }
 
@@ -32,7 +32,7 @@ const sharedItems = uniqueCompartments.map(
 // Convert each letter to its value
 // a = 97, so we need to subtract 96 to map it to 1
 // A = 65, so we need to subtract 38 to map it to 27
-const getLetterValues = function(sharedItems: string[]) {
+const getLetterValues = function(sharedItems: string[]): number[] {
     return sharedItems.map(
         (item: string) => item.toLowerCase() === item ? (item.charCodeAt(0) - 96) : (item.charCodeAt(0) - 38)
     )
