@@ -7,5 +7,6 @@ Solutions are written in TypeScript.
 To run the solutions:
 
 ```bash
-npx ts-node solution.ts
+yarn install
+yarn ts-node year/day/solution.ts
 ```
