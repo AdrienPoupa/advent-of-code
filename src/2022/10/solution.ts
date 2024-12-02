@@ -3,7 +3,9 @@ import fs from "node:fs";
 /**
  * PART 1
  */
-const instructions: string[] = fs.readFileSync("input.txt", "utf8").split("\n");
+const instructions: string[] = fs
+    .readFileSync(__dirname + "/input.txt", "utf8")
+    .split("\n");
 
 const calculateValues = function (
     instructions: string[],
