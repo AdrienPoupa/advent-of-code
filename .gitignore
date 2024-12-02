@@ -1,2 +1,5 @@
 *.js
 .idea
+.yarn
+.pnp.cjs
+node_modules

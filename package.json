@@ -1,0 +1,17 @@
+{
+    "name": "advent-of-code",
+    "version": "1.0.0",
+    "author": "Adrien Poupa",
+    "packageManager": "yarn@4.5.3",
+    "scripts": {
+        "build": "tsc -p .",
+        "lint": "prettier --check .",
+        "test": "ts-node src/index.ts"
+    },
+    "devDependencies": {
+        "@types/node": "^22.10.1",
+        "prettier": "^3.4.1",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.7.2"
+    }
+}
