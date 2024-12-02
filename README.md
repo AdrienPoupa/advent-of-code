@@ -13,6 +13,6 @@ yarn install
 # Run the solution for a specific day
 yarn test 2024/01
 
-# Run the solution for a whole year
+# Run the solutions for a whole year
 yarn test 2024
 ```
