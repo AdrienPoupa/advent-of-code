@@ -7,10 +7,12 @@ const folderPath = __dirname + `/${path}`;
 const filePath = folderPath + `/solution.ts`;
 
 const runSolution = (path: string) => {
-    console.log(`Running solution for ${path}`);
+    const dayPath = path.replace(`${__dirname}/`, "");
+    console.log(`# Running solution for day ${dayPath}`);
     execSync(`yarn ts-node ${path}/solution.ts`, {
         stdio: "inherit",
     });
+    console.log("\n");
 };
 
 const runFolder = (folderPath: fs.PathLike) => {
@@ -20,7 +22,6 @@ const runFolder = (folderPath: fs.PathLike) => {
         runSolution(`${folderPath}/${dirent.name}`);
     }
     dir.closeSync();
-    process.exit(0);
 };
 
 // Run a single day
@@ -39,6 +40,6 @@ if (fs.existsSync(folderPath)) {
 const years = ["2022", "2024"];
 
 years.forEach((year) => {
-    console.log(`Running solutions for year ${year}`);
+    console.log(`# Running solutions for year ${year}\n`);
     runFolder(__dirname + `/${year}`);
 });
