@@ -134,7 +134,7 @@ let nbLoops = 0;
 
 for (let y = 0; y < grid.length; y++) {
     for (let x = 0; x < grid[y].length; x++) {
-        if (!positions.has(`${y},${x}`)) {
+        if (!positions.has(`${y},${x}`) || grid[y][x] === "#") {
             continue;
         }
         const currentGrid = deepCopyGrid(grid);
