@@ -58,7 +58,7 @@ const nextMove = (
 const isValidPosition = (grid: string[][], x: number, y: number): boolean =>
     x >= 0 && x < grid.length && y >= 0 && y < grid[x].length;
 
-const traverse = (grid: string[][], startX: number, startY: number): number => {
+const traverse = (grid: string[][], startX: number, startY: number) => {
     const positions = new Set<string>();
     positions.add(`${startX},${startY}`);
 
@@ -83,14 +83,14 @@ const traverse = (grid: string[][], startX: number, startY: number): number => {
         }
     }
 
-    return positions.size;
+    return positions;
 };
 
 const [startX, startY] = findStart(grid);
 
 const positions = traverse(grid, startX, startY);
 
-console.log("Number of traversed positions: " + positions);
+console.log("Number of traversed positions: " + positions.size);
 
 /**
  * PART 2
@@ -134,6 +134,9 @@ let nbLoops = 0;
 
 for (let y = 0; y < grid.length; y++) {
     for (let x = 0; x < grid[y].length; x++) {
+        if (!positions.has(`${y},${x}`)) {
+            continue;
+        }
         const currentGrid = deepCopyGrid(grid);
         currentGrid[y][x] = "#";
         hasLoop(currentGrid, startX, startY) ? nbLoops++ : null;
