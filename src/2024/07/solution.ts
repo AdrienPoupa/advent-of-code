@@ -15,7 +15,7 @@ const inputLines = input
 
 const isSolvable = (expectedTotal: number, numbers: number[]): boolean => {
     const recurse = (index: number, currentTotal: number): boolean => {
-        if (index === numbers.length) {
+        if (index === numbers.length || currentTotal > expectedTotal) {
             return currentTotal === expectedTotal;
         }
 
@@ -48,7 +48,7 @@ const isSolvableWithConcat = (
     numbers: number[],
 ): boolean => {
     const recurse = (index: number, currentTotal: number): boolean => {
-        if (index === numbers.length) {
+        if (index === numbers.length || currentTotal > expectedTotal) {
             return currentTotal === expectedTotal;
         }
 
