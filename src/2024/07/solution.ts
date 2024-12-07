@@ -13,39 +13,22 @@ const inputLines = input
     number[],
 ];
 
-enum Operator {
-    ADDITION = "+",
-    MULTIPLICATION = "*",
-}
-
 const isSolvable = (expectedTotal: number, numbers: number[]): boolean => {
-    const recurse = (
-        index: number,
-        operator: Operator,
-        total: number,
-    ): number => {
-        const newTotal =
-            // Special case for index 0 to avoid multiplying by 0, nulling the result
-            index === 0
-                ? numbers[index]
-                : operator === Operator.ADDITION
-                  ? total + numbers[index]
-                  : total * numbers[index];
-
-        if (index + 1 === numbers.length) {
-            return newTotal;
+    const recurse = (index: number, currentTotal: number): boolean => {
+        if (index === numbers.length) {
+            return currentTotal === expectedTotal;
         }
 
-        const additionResult = recurse(index + 1, Operator.ADDITION, newTotal);
-        // Optimize by returning early if the addition result is the expected total
-        if (additionResult === expectedTotal) {
-            return additionResult;
+        const nextNumber = numbers[index];
+
+        if (recurse(index + 1, currentTotal + nextNumber)) {
+            return true;
         }
 
-        return recurse(index + 1, Operator.MULTIPLICATION, newTotal);
+        return recurse(index + 1, currentTotal * nextNumber);
     };
 
-    return recurse(0, Operator.ADDITION, 0) === expectedTotal;
+    return recurse(1, numbers[0]);
 };
 
 const solvableLines = inputLines.filter((line) => isSolvable(line[0], line[1]));
@@ -60,3 +43,47 @@ console.log("Calibration result: " + solvableLinesTotal);
 /**
  * PART 2
  */
+const isSolvableWithConcat = (
+    expectedTotal: number,
+    numbers: number[],
+): boolean => {
+    const recurse = (index: number, currentTotal: number): boolean => {
+        if (index === numbers.length) {
+            return currentTotal === expectedTotal;
+        }
+
+        const nextNumber = numbers[index];
+
+        if (recurse(index + 1, currentTotal + nextNumber)) {
+            return true;
+        }
+
+        if (recurse(index + 1, currentTotal * nextNumber)) {
+            return true;
+        }
+
+        const nextPowerOf10 = Math.pow(
+            10,
+            Math.floor(Math.log10(nextNumber) + 1),
+        );
+        const concatenatedTotal = currentTotal * nextPowerOf10 + nextNumber;
+
+        return recurse(index + 1, concatenatedTotal);
+    };
+
+    return recurse(1, numbers[0]);
+};
+
+const unsolvableLines = inputLines.filter(
+    (line) => !isSolvable(line[0], line[1]),
+);
+
+const solvableLinesTotalWithConcat = unsolvableLines.filter((line) =>
+    isSolvableWithConcat(line[0], line[1]),
+);
+
+const allSolvableLinesTotal =
+    solvableLinesTotal +
+    solvableLinesTotalWithConcat.reduce((acc, line) => acc + line[0], 0);
+
+console.log("Total calibration result: " + allSolvableLinesTotal);
