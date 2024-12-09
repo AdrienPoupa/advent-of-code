@@ -33,9 +33,6 @@ const convertDiskMap = (input: number[]): DiskMap => {
     return diskMap;
 };
 
-const diskMapToString = (diskMap: DiskMap | DiskMapBlock): string =>
-    diskMap.map((block) => block).join("");
-
 const optimizeDiskMap = (diskMap: DiskMap): DiskMap => {
     const totalBlocks = diskMap.filter((block) => block !== FREE_SPACE).length;
     let blocksOptimized = 0;
@@ -102,16 +99,19 @@ const convertDiskMapBlocks = (input: number[]): DiskMapBlock => {
 };
 
 const optimizeDiskMapBlocks = (diskMap: DiskMapBlock): DiskMapBlock => {
+    const movedBlocks = new Set<number>();
     for (let i = diskMap.length - 1; i >= 0; i--) {
-        if (diskMap[i][0] === FREE_SPACE) {
+        if (
+            diskMap[i][0] === FREE_SPACE ||
+            movedBlocks.has(diskMap[i][0] as number)
+        ) {
             continue;
         }
-
         for (let j = 0; j < diskMap.length; j++) {
             if (
                 diskMap[j][0] === FREE_SPACE &&
                 diskMap[j].length >= diskMap[i].length &&
-                j < i
+                j <= i
             ) {
                 const diff = Math.abs(diskMap[i].length - diskMap[j].length);
                 diskMap[j] = diskMap[i];
@@ -126,7 +126,7 @@ const optimizeDiskMapBlocks = (diskMap: DiskMapBlock): DiskMapBlock => {
                     ...Array(diskMap[index].length).fill(FREE_SPACE),
                 ];
 
-                for (let k = 0; k < diskMap.length; k++) {
+                for (let k = j; k < diskMap.length; k++) {
                     if (
                         diskMap[k][0] === FREE_SPACE &&
                         diskMap[k + 1] &&
@@ -137,6 +137,7 @@ const optimizeDiskMapBlocks = (diskMap: DiskMapBlock): DiskMapBlock => {
                             ...diskMap[k + 1],
                         ] as "."[];
                         diskMap.splice(k + 1, 1);
+                        i = k + 1 === i ? i : i + 1; // This made me loose way too much time...
                     }
                     if (
                         diskMap[k][0] === FREE_SPACE &&
@@ -148,14 +149,16 @@ const optimizeDiskMapBlocks = (diskMap: DiskMapBlock): DiskMapBlock => {
                             ...diskMap[k - 1],
                         ] as "."[];
                         diskMap.splice(k - 1, 1);
+                        i = k - 1 === i ? i : i - 1;
                     }
                 }
+                movedBlocks.add(diskMap[j][0] as number);
                 break;
             }
         }
     }
 
-    return diskMap.filter((block) => block);
+    return diskMap;
 };
 
 const diskMapBlock = convertDiskMapBlocks(parsedInput);
