@@ -140,5 +140,90 @@ const isPositionValid = (map: string[][], x: number, y: number) => {
     );
 };
 
-const result = dijkstraAlgorithm(parsedInput);
-console.log("Best path score: ", result);
+const bestPathScore = dijkstraAlgorithm(parsedInput);
+console.log("Best path score: ", bestPathScore);
+
+/**
+ * PART 2
+ */
+function dijkstraPaths(map: string[][], lowestCost: number) {
+    const [startY, startX] = findPosition(map, "S");
+    const [endY, endX] = findPosition(map, "E");
+    const paths = [];
+
+    const queue: {
+        x: number;
+        y: number;
+        direction: Direction;
+        cost: number;
+        path: string[];
+    }[] = [];
+
+    const startDirection = Direction.Right;
+    queue.push({
+        x: startX,
+        y: startY,
+        direction: startDirection,
+        cost: 0,
+        path: [`${startX},${startY}`],
+    });
+
+    const visited = new Map<string, number>();
+
+    while (queue.length > 0) {
+        const { x, y, direction, cost, path } = queue.shift();
+        const stateKey = `${x},${y},${direction}`;
+
+        if (visited.has(stateKey) && visited.get(stateKey)! < cost) {
+            continue;
+        }
+        visited.set(stateKey, cost);
+
+        if (x === endX && y === endY && cost === lowestCost) {
+            paths.push(path);
+            continue;
+        }
+
+        const [dy, dx] = directionDeltas[direction];
+        const newX = x + dx;
+        const newY = y + dy;
+        if (isPositionValid(map, newX, newY)) {
+            const forwardCost = cost + 1;
+            queue.push({
+                x: newX,
+                y: newY,
+                direction,
+                cost: forwardCost,
+                path: [...path, `${newX},${newY}`],
+            });
+        }
+
+        const clockwiseDirection = rotateClockwise[direction];
+        const clockwiseCost = cost + 1000;
+        queue.push({
+            x,
+            y,
+            direction: clockwiseDirection,
+            cost: clockwiseCost,
+            path: [...path, `${x},${y}`],
+        });
+
+        const counterDirection = rotateCounterClockwise[direction];
+        const counterCost = cost + 1000;
+        queue.push({
+            x,
+            y,
+            direction: counterDirection,
+            cost: counterCost,
+            path: [...path, `${x},${y}`],
+        });
+    }
+    return paths;
+}
+
+const paths = dijkstraPaths(parsedInput, bestPathScore);
+const uniquePaths = new Set<string>();
+paths.forEach((path) => {
+    path.forEach((p) => uniquePaths.add(p));
+});
+console.log("Number of unique paths: " + uniquePaths.size);
